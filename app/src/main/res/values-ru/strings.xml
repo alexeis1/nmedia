@@ -2,4 +2,9 @@
 <resources>
     <string name="app_name">НМедиа</string>
     <string name="nmedia">НМедиа!</string>
+    <string name="description_post_avatar">аватар</string>
+    <string name="more_vertical">больше</string>
+    <string name="likes">лайки</string>
+    <string name="views">просмотры</string>
+    <string name="shares">репосты</string>
 </resources>
