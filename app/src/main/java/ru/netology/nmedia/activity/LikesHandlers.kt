@@ -1,11 +1,13 @@
-package ru.netology
+package ru.netology.nmedia.activity
 
 import android.content.res.Resources
 import android.view.View
+import ru.netology.R
 import ru.netology.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.viewmodel.PostViewModel
 
-class LikesMV(
+class LikesHandlers(
     private val activity: MainActivity,
 ){
     var binding  : ActivityMainBinding? = null
@@ -30,10 +32,11 @@ class LikesMV(
         }
     }
 
-    fun initLikeBindings(binding: ActivityMainBinding, post: Post){
+    fun initLikeBindings(binding: ActivityMainBinding, viewModel : PostViewModel){
         val onClick = fun(_: View) {
-            post.isLikedByMe = !post.isLikedByMe
-            updateLikeState(binding, post)
+            viewModel.data.value?.let { post->
+                viewModel.like(!post.isLikedByMe)
+            }
         }
 
         binding.btnLikes.setOnClickListener(onClick)

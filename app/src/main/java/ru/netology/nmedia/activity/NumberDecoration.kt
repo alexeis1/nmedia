@@ -1,8 +1,7 @@
-package ru.netology
+package ru.netology.nmedia.activity
 
 import java.util.*
 import kotlin.math.abs
-import kotlin.math.round
 
 class NumberDecoration(private val number: Long) {
     private fun formatKilo(number: Long, postfix : Char) : String{

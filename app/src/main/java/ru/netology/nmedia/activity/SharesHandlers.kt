@@ -1,12 +1,13 @@
-package ru.netology
+package ru.netology.nmedia.activity
 
 import android.content.res.Resources
 import android.graphics.Typeface
 import android.view.View
 import ru.netology.databinding.ActivityMainBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.viewmodel.PostViewModel
 
-class SharesMV(    private val activity: MainActivity
+class SharesHandlers(private val activity: MainActivity
 ) {
     var binding  : ActivityMainBinding? = null
     private val resources: Resources
@@ -20,10 +21,9 @@ class SharesMV(    private val activity: MainActivity
         }
     }
 
-    fun initSharesBindings(binding: ActivityMainBinding, post: Post){
+    fun initSharesBindings(binding: ActivityMainBinding, viewModel : PostViewModel){
         val onClick = fun(_: View) {
-            ++post.mySharedCount
-            updateSharesState(binding, post)
+                viewModel.share()
         }
 
         binding.btnShares.setOnClickListener(onClick)
