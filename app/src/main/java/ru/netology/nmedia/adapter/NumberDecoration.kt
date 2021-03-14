@@ -1,4 +1,4 @@
-package ru.netology.nmedia.activity
+package ru.netology.nmedia.adapter
 
 import java.util.*
 import kotlin.math.abs

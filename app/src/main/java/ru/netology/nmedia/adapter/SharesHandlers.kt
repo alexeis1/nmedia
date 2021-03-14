@@ -1,19 +1,19 @@
-package ru.netology.nmedia.activity
+package ru.netology.nmedia.adapter
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Typeface
 import android.view.View
-import ru.netology.databinding.ActivityMainBinding
+import ru.netology.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 
-class SharesHandlers(private val activity: MainActivity
+class SharesHandlers(private val context: Context
 ) {
-    var binding  : ActivityMainBinding? = null
     private val resources: Resources
-        get() = activity.resources
+        get() = context.resources
 
-    fun updateSharesState(binding: ActivityMainBinding, post: Post)
+    fun updateSharesState(binding: CardPostBinding, post: Post)
     {
         with(binding){
             textShares.text = NumberDecoration(post.shares + post.mySharedCount).toString()
@@ -21,9 +21,9 @@ class SharesHandlers(private val activity: MainActivity
         }
     }
 
-    fun initSharesBindings(binding: ActivityMainBinding, viewModel : PostViewModel){
+    fun initSharesBindings(binding: CardPostBinding, viewModel : PostViewModel, post : Post){
         val onClick = fun(_: View) {
-                viewModel.share()
+                viewModel.share(post.id)
         }
 
         binding.btnShares.setOnClickListener(onClick)
