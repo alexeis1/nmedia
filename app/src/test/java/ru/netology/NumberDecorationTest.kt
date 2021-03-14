@@ -3,7 +3,7 @@ package ru.netology
 import org.junit.Test
 
 import org.junit.Assert.*
-import ru.netology.nmedia.activity.NumberDecoration
+import ru.netology.nmedia.adapter.NumberDecoration
 
 class NumberDecorationTest {
 

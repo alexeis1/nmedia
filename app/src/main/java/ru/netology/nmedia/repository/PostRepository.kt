@@ -7,17 +7,17 @@ interface PostRepository {
     /**
      * выдает набор данных для инициализации View
      */
-    fun get(): LiveData<Post>
+    fun getAll(): LiveData<List<Post>>
 
     /**
      * отправляет изменения в модель
      * isLiked - true пост лайкнули
      * isLiked - false пост дизлайкнули
      */
-    fun like(isLiked : Boolean)
+    fun like(id: Long, isLiked : Boolean)
 
     /**
      * указывает на то, что постом поделились
      */
-    fun share()
+    fun share(id: Long)
 }
