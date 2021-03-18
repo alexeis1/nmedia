@@ -1,6 +1,7 @@
 package ru.netology.nmedia.repository
 
 import android.graphics.drawable.Icon
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.netology.R
@@ -169,7 +170,9 @@ class PostRepositoryInMemoryImpl : PostRepository {
     }
 
     override fun removeById(id: Long) {
-        val posts = posts.filter { it.id != id }
+        Log.d("removeById", posts.size.toString())
+        posts = posts.filter { it.id != id }
+        Log.d("removeById", posts.size.toString())
         data.value = posts
     }
 }
