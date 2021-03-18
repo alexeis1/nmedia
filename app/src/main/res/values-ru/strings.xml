@@ -7,4 +7,12 @@
     <string name="likes">лайки</string>
     <string name="views">просмотры</string>
     <string name="shares">репосты</string>
+    <string name="remove">Удалить</string>
+    <string name="post_text">Пишите здесь</string>
+    <string name="save">Сохранить</string>
+    <string name="string_save">Сохранить</string>
+    <string name="error_empty_content">Пост не может быть пустым</string>
+    <string name="edit">Редактировать</string>
+    <string name="edit_message">Редактирование сообщения</string>
+    <string name="cancel_edit_operation">Отмена операции редактирования</string>
 </resources>
