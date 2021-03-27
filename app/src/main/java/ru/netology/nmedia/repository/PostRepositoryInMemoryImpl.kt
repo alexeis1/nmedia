@@ -1,6 +1,7 @@
 package ru.netology.nmedia.repository
 
 import android.graphics.drawable.Icon
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.netology.R
@@ -123,7 +124,7 @@ class PostRepositoryInMemoryImpl : PostRepository {
     /**
      * класс рассылающий изменения подписчикам
      */
-    private val data = MutableLiveData(posts)
+    private val data   = MutableLiveData(posts)
 
     override fun getAll(): LiveData<List<Post>> = data
     /**
@@ -138,6 +139,26 @@ class PostRepositoryInMemoryImpl : PostRepository {
         data.value = posts
     }
 
+    private var nextId : Long = posts.first().id + 1
+    override fun save(post : Post) {
+        if (post.id == 0L){
+            posts = listOf(
+                post.copy(
+                    id = nextId++,
+                    author = "Me",
+                    isLikedByMe = false,
+                    published = "now")
+            ) + posts
+            data.value = posts
+            return
+        }
+
+        posts = posts.map {
+            if (it.id != post.id) it else it.copy(content = post.content)
+        }
+        data.value = posts
+    }
+
     /**
      * указывает на то, что постом поделились
      */
@@ -145,6 +166,13 @@ class PostRepositoryInMemoryImpl : PostRepository {
         posts = posts.map {
             if (it.id != id) it else it.copy(mySharedCount = it.mySharedCount+1)
         }
+        data.value = posts
+    }
+
+    override fun removeById(id: Long) {
+        Log.d("removeById", posts.size.toString())
+        posts = posts.filter { it.id != id }
+        Log.d("removeById", posts.size.toString())
         data.value = posts
     }
 }

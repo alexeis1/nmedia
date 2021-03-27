@@ -29,7 +29,7 @@
         android:singleLine="true"
         android:textColor="@color/gray"
         app:layout_constraintBottom_toTopOf="@+id/published"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintEnd_toStartOf="@+id/menuButton"
         app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toTopOf="@+id/avatar"
         tools:text="@sample/posts.json/data/author" />
@@ -46,7 +46,7 @@
         tools:text="@sample/posts.json/data/published" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/menuButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="@dimen/common_spacing"
@@ -66,7 +66,7 @@
         android:visibility="visible"
         app:barrierDirection="bottom"
         android:layout_margin="@dimen/common_spacing"
-        app:constraint_referenced_ids="avatar,author,published,imageButton"
+        app:constraint_referenced_ids="avatar,author,published,menuButton"
         />
 
     <TextView

@@ -3,7 +3,7 @@
     <item name="avatar" type="id" />
     <item name="author" type="id" />
     <item name="published" type="id" />
-    <item name="imageButton" type="id" />
+    <item name="menuButton" type="id" />
     <item name="barrier" type="id" />
     <item name="postText" type="id" />
     <item name="btn_views" type="id" />

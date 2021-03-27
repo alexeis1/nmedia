@@ -6,4 +6,12 @@
     <string name="likes">likes</string>
     <string name="views">views</string>
     <string name="shares">shares</string>
+    <string name="remove">Remove</string>
+    <string name="post_text">Post Text</string>
+    <string name="save">Save</string>
+    <string name="string_save">Save</string>
+    <string name="error_empty_content">Content can`t be empty</string>
+    <string name="edit">edit</string>
+    <string name="edit_message">Edit Message</string>
+    <string name="cancel_edit_operation">Cancel Edit Operation</string>
 </resources>

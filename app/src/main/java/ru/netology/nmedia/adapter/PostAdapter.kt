@@ -39,10 +39,12 @@ class PostViewHolder(
 {
     private val likesHandlers  : LikesHandlers  = LikesHandlers(context)
     private val sharesHandlers : SharesHandlers = SharesHandlers(context)
+    private val crudHelper     : CrudHelper     = CrudHelper(context)
 
     fun bind(post : Post){
-        likesHandlers.initLikeBindings   (binding, viewModel, post)
+        likesHandlers. initLikeBindings  (binding, viewModel, post)
         sharesHandlers.initSharesBindings(binding, viewModel, post)
+        crudHelper.    initCrudBindings  (binding, viewModel, post)
         with(binding)
         {
             author.   text = post.author
@@ -56,3 +58,4 @@ class PostViewHolder(
         }
     }
 }
+
