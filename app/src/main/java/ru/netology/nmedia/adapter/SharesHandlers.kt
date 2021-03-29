@@ -16,8 +16,10 @@ class SharesHandlers(private val context: Context
     fun updateSharesState(binding: CardPostBinding, post: Post)
     {
         with(binding){
-            textShares.text = NumberDecoration(post.shares + post.mySharedCount).toString()
-            textShares.setTypeface(null, if (post.mySharedCount > 0) Typeface.BOLD else Typeface.NORMAL)
+            /*textShares.text = NumberDecoration(post.shares + post.mySharedCount).toString()
+            textShares.setTypeface(null, if (post.mySharedCount > 0) Typeface.BOLD else Typeface.NORMAL)*/
+            btnShares.text = NumberDecoration(post.shares + post.mySharedCount).toString()
+            btnShares.setTypeface(null, if (post.mySharedCount > 0) Typeface.BOLD else Typeface.NORMAL)
         }
     }
 
@@ -27,6 +29,5 @@ class SharesHandlers(private val context: Context
         }
 
         binding.btnShares.setOnClickListener(onClick)
-        binding.textShares.setOnClickListener(onClick)
     }
 }
