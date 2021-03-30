@@ -17,18 +17,8 @@ class LikesHandlers(
     fun updateLikeState(binding: CardPostBinding, post: Post)
     {
         with(binding){
-            if (post.isLikedByMe)
-            {
-                btnLikes.setImageResource(R.drawable.ic_liked_24)
-                textLikes.setTextColor(resources.getColor(R.color.likesRed, null))
-                textLikes.text = NumberDecoration(post.likes + 1).toString()
-            }
-            else
-            {
-                btnLikes.setImageResource(R.drawable.ic_like_24)
-                textLikes.setTextColor(resources.getColor(R.color.likesGray, null))
-                textLikes.text = NumberDecoration(post.likes).toString()
-            }
+            btnLikes.isChecked = post.isLikedByMe
+            btnLikes.text = NumberDecoration(post.likes + if (post.isLikedByMe) 1 else 0).toString()
         }
     }
 
@@ -38,6 +28,5 @@ class LikesHandlers(
         }
 
         binding.btnLikes.setOnClickListener(onClick)
-        binding.textLikes.setOnClickListener(onClick)
     }
 }
