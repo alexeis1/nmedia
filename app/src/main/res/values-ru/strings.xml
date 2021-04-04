@@ -18,4 +18,6 @@
     <string name="chooser_share_post">Передать пост</string>
     <string name="add_post">Добавить пост</string>
     <string name="description_post_save">Сохранить</string>
+    <string name="play">Просмотр</string>
+    <string name="video_preview">Предпросмотр</string>
 </resources>

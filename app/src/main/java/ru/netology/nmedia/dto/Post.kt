@@ -3,6 +3,7 @@ package ru.netology.nmedia.dto
 import android.graphics.drawable.Icon
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import java.net.URL
 
 @Parcelize
 data class Post(
@@ -11,6 +12,7 @@ data class Post(
     val content      : String = "",
     val published    : String = "",
     val avatar       : Icon? = null,
+    val video        : URL? = null,
 
     val likes        : Long = 10L,
     val shares       : Long = 5L,
