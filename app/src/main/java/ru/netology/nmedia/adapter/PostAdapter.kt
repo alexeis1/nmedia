@@ -1,7 +1,10 @@
 package ru.netology.nmedia.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +37,7 @@ class PostAdapter(
 
 class PostViewHolder(
     private val binding: CardPostBinding,
-    context : Context,
+    private val context : Context,
     private val viewModel: PostViewModel) : RecyclerView.ViewHolder(binding.root)
 {
     private val likesHandlers  : LikesHandlers  = LikesHandlers(context)
@@ -52,9 +55,29 @@ class PostViewHolder(
             postText. text = post.content
             textViews.text = NumberDecoration(post.views).toString()
 
+            if (post.video != null) {
+                videoElements.visibility = View.VISIBLE
+                setPlayVideoHandler(post)
+            } else {
+                videoElements.visibility = View.GONE
+            }
+
             likesHandlers.updateLikeState(   this, post)
             sharesHandlers.updateSharesState(this, post)
             avatar.setImageIcon(post.avatar)
+        }
+    }
+
+    private fun setPlayVideoHandler(post : Post){
+        with(binding)
+        {
+            val onClick = fun(_: View) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.video?.toString()))
+                sharesHandlers.toString()
+                context.startActivity(intent)
+            }
+            playButton.setOnClickListener(onClick)
+            videoPreview.setOnClickListener(onClick)
         }
     }
 }

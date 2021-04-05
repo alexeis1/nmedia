@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="nmedia">NMedia!</string>
+    <string name="play">play</string>
+    <string name="video_preview">video preview</string>
 </resources>

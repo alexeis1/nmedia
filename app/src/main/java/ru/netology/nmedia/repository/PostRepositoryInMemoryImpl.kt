@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.netology.R
 import ru.netology.nmedia.dto.Post
+import java.net.URL
 
 class PostRepositoryInMemoryImpl : PostRepository {
     /**
@@ -15,9 +16,10 @@ class PostRepositoryInMemoryImpl : PostRepository {
         Post(
             id = 9,
             author = "Нетология. Университет интернет-профессий",
-            content = "Освоение новой профессии — это не только открывающиеся возможности и перспективы, но и настоящий вызов самому себе. Приходится выходить из зоны комфорта и перестраивать привычный образ жизни: менять распорядок дня, искать время для занятий, быть готовым к возможным неудачам в начале пути. В блоге рассказали, как избежать стресса на курсах профпереподготовки → http://netolo.gy/fPD",
+            content = "Иллюстрация в медиа. Приглашение на дизайн-лекторий",
             published = "21 мая в 18:36",
             avatar = Icon.createWithResource("ru.netology", R.drawable.post_avatar_drawable),
+            video = URL("https://www.youtube.com/watch?v=WhWc3b3KhnY"),
             likes = 10,
             shares = 5,
             views = 5,

@@ -14,4 +14,9 @@
     <string name="edit">edit</string>
     <string name="edit_message">Edit Message</string>
     <string name="cancel_edit_operation">Cancel Edit Operation</string>
+    <string name="chooser_share_post">Share post</string>
+    <string name="description_post_save">Save</string>
+    <string name="add_post">Add Post</string>
+    <string name="play">play</string>
+    <string name="video_preview">video preview</string>
 </resources>

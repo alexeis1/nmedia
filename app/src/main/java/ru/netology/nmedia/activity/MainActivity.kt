@@ -1,20 +1,21 @@
 package ru.netology.nmedia.activity
 
+import android.content.Intent
+import android.os.Build.ID
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.launch
 import androidx.activity.viewModels
+import androidx.core.app.ActivityOptionsCompat
 import ru.netology.R
 import ru.netology.databinding.ActivityMainBinding
-import ru.netology.databinding.CardPostBinding
-import ru.netology.nmedia.adapter.LikesHandlers
-import ru.netology.nmedia.adapter.NumberDecoration
 import ru.netology.nmedia.adapter.PostAdapter
-import ru.netology.nmedia.adapter.SharesHandlers
+import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.utils.AndroidUtils
 import ru.netology.nmedia.viewmodel.PostViewModel
-import ru.netology.nmedia.dto.Post as Post
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(posts)
         })
 
-        binding.save.setOnClickListener {
+        /*binding.save.setOnClickListener {
             with(binding.content) {
                 if (text.isNullOrBlank()) {
                     Toast.makeText(
@@ -60,8 +61,27 @@ class MainActivity : AppCompatActivity() {
                 requestFocus()
                 setText(post.content)
             }
+        })*/
+
+        val newPostLauncher = registerForActivityResult(NewPostResultContract()){
+                result->
+            result ?: return@registerForActivityResult
+            viewModel.changeContent(result)
+            viewModel.save()
+        }
+
+        viewModel.edited.observe(this, { post->
+            if (post.id == 0L){
+                return@observe
+            }
+            newPostLauncher.launch(post)
         })
 
+        binding.fab.setOnClickListener(){
+            newPostLauncher.launch(null)
+        }
+
+/*
         //Функция отмены становится видна только пока редактор текста
         //имеет фокус
         binding.content.setOnFocusChangeListener { _, hasFocus ->
@@ -78,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.cancelEdit()
             //Забираем фокус. Это действие скроет доп. панель
             binding.content.clearFocus()
-        }
+        }*/
     }
 
 }

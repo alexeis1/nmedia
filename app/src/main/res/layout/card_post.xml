@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -47,31 +46,52 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/menuButton"
+        style="@style/Widget.AppTheme.SharesButton"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        app:iconPadding="0dp"
-        android:padding="0dp"
         android:layout_marginEnd="@dimen/common_spacing"
         android:contentDescription="@string/more_vertical"
+        android:padding="0dp"
+        app:icon="@drawable/ic_baseline_more_vert_24"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/author"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/author"
         app:layout_constraintTop_toTopOf="@+id/author"
         app:layout_constraintVertical_bias="0.0"
-        app:icon="@drawable/ic_baseline_more_vert_24"
-        app:iconGravity="textStart"
-        app:srcCompat="@drawable/ic_baseline_more_vert_24"
-        style="@style/Widget.AppTheme.SharesButton"/>
+        app:srcCompat="@drawable/ic_baseline_more_vert_24" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/common_spacing"
         android:visibility="visible"
         app:barrierDirection="bottom"
-        android:layout_margin="@dimen/common_spacing"
-        app:constraint_referenced_ids="avatar,author,published,menuButton"
-        />
+        app:constraint_referenced_ids="avatar,author,published,menuButton" />
+
+    <ImageView
+        android:id="@+id/videoPreview"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="@dimen/common_spacing"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_marginEnd="@dimen/common_spacing"
+        android:clickable="true"
+        android:contentDescription="@string/video_preview"
+        android:contextClickable="true"
+        android:focusable="true"
+
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/postText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@id/barrier"
+        app:srcCompat="@mipmap/ic_video_foreground"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/postText"
@@ -84,7 +104,7 @@
         app:layout_constraintBottom_toTopOf="@id/barrier7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier"
+        app:layout_constraintTop_toBottomOf="@id/videoPreview"
         tools:text="@sample/posts.json/data/text" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -99,6 +119,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_likes"
+        style="@style/Widget.AppTheme.LikeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checkable="true"
@@ -110,11 +131,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier7"
         tools:checked="@sample/posts.json/data/likedByMe"
-        tools:text="@sample/posts.json/data/likes[0]"
-        style="@style/Widget.AppTheme.LikeButton" />
+        tools:text="@sample/posts.json/data/likes[0]" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_shares"
+        style="@style/Widget.AppTheme.SharesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/shares"
@@ -123,8 +144,7 @@
         app:layout_constraintStart_toEndOf="@id/btn_likes"
         app:layout_constraintTop_toBottomOf="@id/barrier7"
         tools:checked="@sample/posts.json/data/shares"
-        tools:text="@sample/posts.json/data/shares[0]"
-        style="@style/Widget.AppTheme.SharesButton"/>
+        tools:text="@sample/posts.json/data/shares[0]" />
 
     <ImageButton
         android:id="@+id/btn_views"
@@ -160,5 +180,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_likes" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:contentDescription="@string/play"
+        android:focusable="true"
+        android:visibility="gone"
+        app:backgroundTint="@color/transparentColor"
+        app:iconTint="@null"
+        app:iconTintMode="add"
+        app:layout_constraintBottom_toBottomOf="@+id/videoPreview"
+        app:layout_constraintEnd_toEndOf="@+id/videoPreview"
+        app:layout_constraintStart_toStartOf="@+id/videoPreview"
+        app:layout_constraintTop_toTopOf="@+id/videoPreview"
+        app:srcCompat="@drawable/ic_play_arrow_24"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/videoElements"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="playButton,videoPreview" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,4 +13,5 @@
     <color name="gray">#FF5F5F5F</color>
     <color name="likesRed">#FFFF3347</color>
     <color name="likesGray">#FF5F5F5F</color>
+    <color name="transparentColor">#505F5F5F</color>
 </resources>
