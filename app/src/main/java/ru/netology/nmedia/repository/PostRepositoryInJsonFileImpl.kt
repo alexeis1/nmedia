@@ -16,11 +16,19 @@ class PostRepositoryInJsonFileImpl(private val context : Context) : PostReposito
     private val type   = TypeToken.getParameterized(List::class.java, Post::class.java).type
     private var nextId = 1L
     private var posts  = emptyList<Post>()
+    private val avatars = emptyMap<Long,ByteArray>()
     private val data   = MutableLiveData(posts)
     private val fileName = "posts.json"
+    private val avatarsDir = "avatars"
 
     init {
         val file = context.filesDir.resolve(fileName)
+        val avatarsDirResolved = context.filesDir.resolve(avatarsDir)
+        val avatars = emptyMap<Long,ByteArray>().toMutableMap()
+        avatarsDirResolved.list()?.forEach {
+            val imgFile = context.filesDir.resolve("$avatarsDir/$it")
+            avatars[imgFile.nameWithoutExtension.toLong()] = imgFile.readBytes()
+        }
 
         try {
             if (!file.exists()) throw RuntimeException("File $fileName not exists")
