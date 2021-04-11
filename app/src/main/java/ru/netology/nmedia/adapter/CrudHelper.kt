@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.widget.PopupMenu
 import ru.netology.R
 import ru.netology.databinding.CardPostBinding
-import ru.netology.nmedia.activity.MainActivity
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 

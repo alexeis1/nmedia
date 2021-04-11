@@ -11,15 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Nmedia">
 
-        <activity android:name=".nmedia.activity.MainActivity">
+        <activity android:name=".nmedia.activity.AppActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".nmedia.activity.NewPostActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
