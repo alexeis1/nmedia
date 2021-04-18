@@ -18,7 +18,8 @@ class LikesHandlers(
     {
         with(binding){
             btnLikes.isChecked = post.isLikedByMe
-            btnLikes.text = NumberDecoration(post.likes + if (post.isLikedByMe) 1 else 0).toString()
+            //btnLikes.text = NumberDecoration(post.likes + if (post.isLikedByMe) 1 else 0).toString()
+            btnLikes.text = NumberDecoration(post.likes).toString()
         }
     }
 

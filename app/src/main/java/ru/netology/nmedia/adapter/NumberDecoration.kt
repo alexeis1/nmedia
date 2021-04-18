@@ -17,7 +17,7 @@ class NumberDecoration(private val number: Long) {
 
     override fun toString() : String{
         val absNumber = abs(number)
-        val sign      = if (number > 0) "" else "-"
+        val sign      = if (number >= 0) "" else "-"
         val absFormat =  when (absNumber){
             in 0..999           -> absNumber.toString()
             in 1_000..1_000_000 -> formatKilo(absNumber, 'K')
