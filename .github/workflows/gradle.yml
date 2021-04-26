@@ -15,9 +15,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Decode google-services.json
-      
-      env:
-      
+      env: 
       FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
       
       run: echo $FIREBASE_SECRET > nmedia/app/google-services.json
