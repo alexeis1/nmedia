@@ -20,4 +20,9 @@
     <string name="description_post_save">Сохранить</string>
     <string name="play">Просмотр</string>
     <string name="video_preview">Предпросмотр</string>
+    <string name="google_play_unavailable">Google Api Недоступно</string>
+    <string name="channel_remote_name">Уведомления с сервера</string>
+    <string name="channel_remote_description">Уведомления с удалённого сервера</string>
+    <string name="notification_user_liked">%1$s поставил лайк посту %2$s</string>
+    <string name="new_post_arrived">Пользователь %1$s написал новый пост</string>
 </resources>
