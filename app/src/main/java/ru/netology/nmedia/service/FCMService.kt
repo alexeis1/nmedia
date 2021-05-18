@@ -1,30 +1,21 @@
 package ru.netology.nmedia.service
 
-import android.R.attr
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
-import ru.netology.R
-import java.io.IOException
-import java.io.InputStream
-import java.lang.Exception
-import java.net.HttpURLConnection
-import java.net.URL
+import ru.netology.nmedia.R
 import kotlin.random.Random
 
 
 class FCMService : FirebaseMessagingService() {
     private val action = "action"
     private val content = "content"
-    private val post_content  = "post"
     private val channelId = "remote"
     private val gson = Gson()
 
@@ -43,17 +34,11 @@ class FCMService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        try {
-            message.data[action]?.let {
-                when (Action.valueOf(it)) {
-                    Action.LIKE -> handleLike(gson.fromJson(message.data[content], Like::class.java))
-                    Action.NEW_POST -> handleNewPost(gson.fromJson(message.data[post_content], NewPost::class.java))
-                }
-            }
-        }
-        catch (e : Exception)
-        {
-            println(e.message)
+
+        message.data[action]?.let {
+           when (Action.valueOf(it)) {
+              Action.LIKE -> handleLike(gson.fromJson(message.data[content], Like::class.java))
+           }
         }
     }
 
@@ -61,69 +46,32 @@ class FCMService : FirebaseMessagingService() {
         println(token)
     }
 
-    private fun handleNewPost(newPost: NewPost) {
-        val notification = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(getString(R.string.new_post_arrived, newPost.postAuthor))
-                .setLargeIcon(newPost.avatarUrl)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentText(newPost.content)
-                .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText(newPost.content))
-                .build()
-
-        NotificationManagerCompat.from(this)
-                .notify(Random.nextInt(100_000), notification)
-    }
-
     private fun handleLike(content: Like) {
         val notification = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(
-                        getString(
-                                R.string.notification_user_liked,
-                                content.userName,
-                                content.postAuthor,
-                        )
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(
+                getString(
+                    R.string.notification_user_liked,
+                    content.userName,
+                    content.postAuthor,
                 )
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .build()
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
 
         NotificationManagerCompat.from(this)
-                .notify(Random.nextInt(100_000), notification)
+            .notify(Random.nextInt(100_000), notification)
     }
-}
-
-private fun NotificationCompat.Builder.setLargeIcon(avatarUrl: String): NotificationCompat.Builder {
-    return setLargeIcon(try {
-        val url = URL(avatarUrl)
-        val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-        connection.doInput = true
-        connection.connect()
-        val input: InputStream = connection.getInputStream()
-        BitmapFactory.decodeStream(input)
-    } catch (e: IOException) {
-        // Log exception
-        null
-    })
 }
 
 enum class Action {
     LIKE,
-    NEW_POST
 }
 
-data class NewPost(
-        val postId: Long,
-        val postAuthor: String,
-        val content: String,
-        val avatarUrl: String,
-)
-
 data class Like(
-        val userId: Long,
-        val userName: String,
-        val postId: Long,
-        val postAuthor: String,
+    val userId: Long,
+    val userName: String,
+    val postId: Long,
+    val postAuthor: String,
 )
 
