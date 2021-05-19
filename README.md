@@ -1,1 +1,1 @@
-﻿Домашнее задание к занятию «4.3 Notifications & Pushes»
+﻿Домашнее задание к занятию «Сетевые запросы: Main Thread & Background»

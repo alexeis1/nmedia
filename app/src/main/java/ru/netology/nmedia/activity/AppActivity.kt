@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package ru.netology.nmedia.activity
 
 import android.content.Intent
@@ -9,15 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.firebase.iid.FirebaseInstanceId
-import ru.netology.R
+import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager
+
         intent?.let {
             if (it.action != Intent.ACTION_SEND) {
                 return@let
@@ -27,14 +24,17 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
             if (text?.isNotBlank() != true) {
                 return@let
             }
+
             intent.removeExtra(Intent.EXTRA_TEXT)
-            findNavController(R.id.nav_host_fragment).navigate(
-                R.id.action_feedFragment_to_newPostFragment,
-                Bundle().apply {
-                    textArg = text
-                }
-            )
+            findNavController(R.id.nav_host_fragment)
+                .navigate(
+                    R.id.action_feedFragment_to_newPostFragment,
+                    Bundle().apply {
+                        textArg = text
+                    }
+                )
         }
+
         checkGoogleApiAvailability()
     }
 
@@ -45,18 +45,11 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 return@with
             }
             if (isUserResolvableError(code)) {
-                getErrorDialog(this@AppActivity, code, 9000)?.show()
+                getErrorDialog(this@AppActivity, code, 9000).show()
                 return
             }
             Toast.makeText(this@AppActivity, R.string.google_play_unavailable, Toast.LENGTH_LONG)
                 .show()
         }
-
-        @Suppress("DEPRECATION")
-        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
-            println(it.token)
-        }
-
-        println("1111")
     }
 }
