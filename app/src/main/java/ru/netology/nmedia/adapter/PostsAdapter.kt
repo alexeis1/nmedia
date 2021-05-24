@@ -1,14 +1,20 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
+import ru.netology.nmedia.dto.Attachment
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.enumeration.AttachmentType
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -36,14 +42,54 @@ class PostViewHolder(
     private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private fun loadAvatar(authorAvatar : String){
+        binding.apply {
+            //удаляем старую картину с предыдущего поста
+            //если карточка была переиспользована
+            Glide.with(avatar).clear(avatar)
+            //загружаем аватар в новую карточку
+            val url = "http://10.0.2.2:9999/avatars/${authorAvatar}"
+            Glide.with(avatar)
+                .load(url)
+                .transform(CircleCrop())
+                .placeholder(R.drawable.ic_loading_100dp)
+                .error(R.drawable.ic_error_100dp)
+                .timeout(10_000)
+                .into(avatar)
+        }
+    }
+
+    private fun loadAttachment(attachment: Attachment) {
+        if (attachment.type == AttachmentType.IMAGE)
+        {
+            binding.attachment.contentDescription = attachment.description
+            binding.attachment.visibility = View.VISIBLE
+            //удаляем старую картину с предыдущего поста
+            //если карточка была переиспользована
+            Glide.with(binding.attachment).clear(binding.attachment)
+            //загружаем аватар в новую карточку
+            val url = "http://10.0.2.2:9999/images/${attachment.url}"
+            Glide.with(binding.attachment)
+                .load(url)
+                .placeholder(R.drawable.ic_loading_100dp)
+                .error(R.drawable.ic_error_100dp)
+                .timeout(10_000)
+                .into(binding.attachment)
+        }
+    }
+
     fun bind(post: Post) {
         binding.apply {
-            author.text = post.author
-            published.text = post.published
-            content.text = post.content
+            author.text    = post.author
+            published.text = post.published.toString()
+            content.text   = post.content
             // в адаптере
             like.isChecked = post.likedByMe
-            like.text = "${post.likes}"
+            like.text      = "${post.likes}"
+
+            loadAvatar(post.authorAvatar)
+            attachment.visibility = View.GONE
+            post.attachment?.apply { loadAttachment(this) }
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
