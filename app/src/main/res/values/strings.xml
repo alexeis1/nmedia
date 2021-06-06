@@ -21,4 +21,5 @@
     <string name="channel_remote_name">Server notifications</string>
     <string name="channel_remote_description">Notifications from remote server</string>
     <string name="attachment">attachment</string>
+    <string name="deleting_error">Deleting Error</string>
 </resources>
