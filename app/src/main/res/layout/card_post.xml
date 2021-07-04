@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/common_spacing"
             android:contentDescription="@string/description_post_menu"
-            app:icon="@drawable/ic_more_vert_24"
+            app:icon="@drawable/ic_more_vert_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/Widget.AppTheme.IconButton"
@@ -83,26 +83,12 @@
             app:layout_constraintTop_toBottomOf="@id/header"
             tools:text="@sample/posts.json/data/content" />
 
-        <ImageView
-            android:id="@+id/attachment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/common_spacing"
-            app:layout_constraintTop_toBottomOf="@id/content"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="16dp"
-            tools:srcCompat="@tools:sample/avatars"
-            tools:visibility="visible"
-            android:contentDescription="@string/attachment" />
-
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/footer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="attachment" />
+            app:constraint_referenced_ids="content" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/like"
@@ -126,10 +112,8 @@
             android:contentDescription="@string/description_post_share"
             app:layout_constraintStart_toEndOf="@+id/like"
             app:layout_constraintTop_toBottomOf="@id/footer"
-            app:icon="@drawable/ic_share_24"
+            app:icon="@drawable/ic_share_24dp"
             style="@style/Widget.AppTheme.IconButton"
             />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

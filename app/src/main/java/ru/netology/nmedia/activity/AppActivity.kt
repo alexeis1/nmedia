@@ -2,15 +2,27 @@ package ru.netology.nmedia.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.viewmodel.AuthViewModel
 
+
+@ExperimentalCoroutinesApi
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +47,73 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 )
         }
 
+        viewModel.data.observe(this) {
+            invalidateOptionsMenu()
+        }
+
+        FirebaseInstallations.getInstance().id.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                println("some stuff happened: ${task.exception}")
+                return@addOnCompleteListener
+            }
+
+            val token = task.result
+            println(token)
+        }
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                println("some stuff happened: ${task.exception}")
+                return@addOnCompleteListener
+            }
+
+            val token = task.result
+            println(token)
+        }
+
         checkGoogleApiAvailability()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+
+        menu?.let {
+            it.setGroupVisible(R.id.unauthenticated, !viewModel.authenticated)
+            it.setGroupVisible(R.id.authenticated, viewModel.authenticated)
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.signin -> {
+                findNavController(R.id.nav_host_fragment).
+                navigate(R.id.action_feedFragment_to_signInFragment)
+                true
+            }
+            R.id.signup -> {
+                findNavController(R.id.nav_host_fragment).
+                navigate(R.id.action_feedFragment_to_signOutFragment)
+                true
+            }
+            R.id.signout -> {
+                AlertDialog.Builder(this)
+                    .setTitle("Program")
+                    .setMessage("Are you sure you want to log out?")
+                    .setPositiveButton(
+                        "Logout"
+                    ) { dialog, _ -> // Закрываем окно
+                        AppAuth.getInstance().removeAuth()
+                        dialog.dismiss()
+                    }.setNegativeButton(
+                        "Cancel"
+                    ) { dialog, _ -> // Закрываем окно
+                        dialog.cancel()
+                    }.show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun checkGoogleApiAvailability() {
