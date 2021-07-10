@@ -1,5 +1,8 @@
 package ru.netology.nmedia.repository
 
+import android.net.Uri
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -8,8 +11,10 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.*
 import ru.netology.nmedia.dao.PostDao
+import ru.netology.nmedia.dao.PostWorkDao
 import ru.netology.nmedia.dto.*
 import ru.netology.nmedia.entity.PostEntity
+import ru.netology.nmedia.entity.PostWorkEntity
 import ru.netology.nmedia.entity.toDto
 import ru.netology.nmedia.entity.toEntity
 import ru.netology.nmedia.enumeration.AttachmentType
@@ -19,8 +24,11 @@ import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.UnknownError
 import java.io.IOException
 
-class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
-    override val data = dao.getAll()
+class PostRepositoryImpl(
+    private val postDao: PostDao,
+    private val postWorkDao: PostWorkDao,
+) : PostRepository {
+    override val data = postDao.getAll()
         .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
 
@@ -32,7 +40,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity( _isRead = true ))
+            postDao.insert(body.toEntity( _isRead = true ))
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -40,10 +48,10 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         }
     }
 
-    override fun getUnreadCount(): Flow<Long> = dao.unreadCountFlow()
+    override fun getUnreadCount(): Flow<Long> = postDao.unreadCountFlow()
 
     override suspend fun markReadAllUnReadPosts() {
-        dao.setAllPostsRead()
+        postDao.setAllPostsRead()
     }
 
     override fun getNewerCount(id: Long): Flow<Int> = flow {
@@ -55,8 +63,8 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity( _isRead = false ))
-            emit(dao.unreadCount().toInt())
+            postDao.insert(body.toEntity( _isRead = false ))
+            emit(postDao.unreadCount().toInt())
         }
     }
         .catch { e -> throw AppError.from(e) }
@@ -70,7 +78,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(PostEntity.fromDto(body))
+            postDao.insert(PostEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -81,7 +89,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     override suspend fun removeById(id: Long) {
         try {
             //согласно условию задачи, сначала удаляем в БД
-            dao.removeById(id)
+            postDao.removeById(id)
             //потом с сервера
             val response = Api.service.removeById(id)
             if (!response.isSuccessful) {
@@ -96,13 +104,13 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
     override suspend fun likeById(id: Long) {
         try {
-            dao.getPostById(id)?.let{
+            postDao.getPostById(id)?.let{
                 it.toDto().copy(
                     likedByMe = !it.likedByMe,
                     likes     =  it.likes + if (it.likedByMe) -1 else +1
                 ).apply {
                     //согласно условию задачи, сначала применяем в бд
-                    dao.insert(PostEntity.fromDto(this))
+                    postDao.insert(PostEntity.fromDto(this))
                     //потом на сервер
                     Api.service.let {api->
                         if (likedByMe) api.likeById(id) else api.dislikeById(id)
@@ -123,7 +131,8 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     override suspend fun saveWithAttachment(post: Post, upload: MediaUpload) {
         try {
             val media = upload(upload)
-            val postWithAttachment = post.copy(attachment = Attachment(media.id, AttachmentType.IMAGE))
+            val postWithAttachment =
+                post.copy(attachment = Attachment(media.id, AttachmentType.IMAGE))
             save(postWithAttachment)
         } catch (e: AppError) {
             throw e
@@ -152,4 +161,59 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             throw UnknownError
         }
     }
+
+    override suspend fun saveWork(post: Post, upload: MediaUpload?): Long {
+        try {
+            val entity = PostWorkEntity.fromDto(post).apply {
+                if (upload != null) {
+                    this.uri = upload.file.toUri().toString()
+                }
+            }
+            return postWorkDao.insert(entity)
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun processWork(id: Long) {
+        try {
+            val entity: PostWorkEntity = try {
+                postWorkDao.getById(id)
+            } catch (e: Exception){
+                throw PostIdNotFound()
+            }
+
+            val post: Post = entity.toDto()
+            if (entity.uri != null) {
+                val upload = MediaUpload(Uri.parse(entity.uri).toFile())
+                saveWithAttachment(post, upload)
+            } else {
+                save(post.copy(attachment = null))
+            }
+            postWorkDao.removeById(id)
+
+        } catch (e: PostIdNotFound) {
+            throw PostIdNotFound()
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    override suspend fun processDeleteWork(id: Long){
+        try {
+            try {
+                removeById(id)
+            } catch (e: Exception){
+                throw PostIdNotFound()
+            }
+
+            postDao.removeById(id)
+        } catch (e: PostIdNotFound) {
+            throw PostIdNotFound()
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
 }
+
+class PostIdNotFound :  RuntimeException()
