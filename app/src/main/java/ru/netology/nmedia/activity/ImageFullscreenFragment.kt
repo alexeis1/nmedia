@@ -14,7 +14,7 @@ import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.view.load
 import ru.netology.nmedia.viewmodel.PostViewModel
 
-
+//1
 class ImageFullscreenFragment : Fragment() {
     companion object {
         var Bundle.urlArg: String? by StringArg
