@@ -70,7 +70,7 @@ class ImageFullscreenFragment : Fragment() {
                     with(controller) {
                         show(WindowInsets.Type.systemBars())
                         systemBarsBehavior =
-                            WindowInsetsController.BEHAVIOR_SHOW_BARS_BY_TOUCH
+                            WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                     }
                 }
             }
