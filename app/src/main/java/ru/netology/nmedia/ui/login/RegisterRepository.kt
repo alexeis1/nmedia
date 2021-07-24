@@ -39,7 +39,7 @@ class RegisterRepository : RegisterRepositoryInterface{
         media: MediaUpload
     ): AuthPair {
         try {
-            val media = MultipartBody.Part.createFormData(
+            val mediaMp = MultipartBody.Part.createFormData(
                 "file", media.file.name, media.file.asRequestBody()
             )
 
@@ -47,7 +47,7 @@ class RegisterRepository : RegisterRepositoryInterface{
                 login = login.toRequestBody(),
                 pass  = pass.toRequestBody(),
                 name  = name.toRequestBody(),
-                media = media
+                media = mediaMp
             )
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
