@@ -11,11 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentSignInBinding
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
-    private val viewModel: SignOutViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: SignOutViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
 
     override fun onPrepareOptionsMenu(menu: Menu){
         super.onPrepareOptionsMenu(menu)

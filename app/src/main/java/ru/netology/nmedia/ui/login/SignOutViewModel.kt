@@ -3,16 +3,16 @@ package ru.netology.nmedia.ui.login
 import android.app.Application
 import android.net.Uri
 import androidx.core.net.toFile
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.MediaUpload
 import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.model.PhotoModel
 import ru.netology.nmedia.util.SingleLiveEvent
+import javax.inject.Inject
 
 private val noPhoto = PhotoModel()
 
@@ -23,8 +23,13 @@ data class SignOutInfo(
     val confirmPassword : String
 )
 
-class SignOutViewModel(application: Application) : AndroidViewModel(application) {
-    private var repository = RegisterRepository()
+@OptIn(ExperimentalCoroutinesApi::class)
+@HiltViewModel
+class SignOutViewModel@Inject constructor(
+    private val auth: AppAuth
+) : ViewModel() {
+    @Inject
+    lateinit var repository: RegisterRepositoryInterface
 
     private val _photo = MutableLiveData(noPhoto)
     val photo: LiveData<PhotoModel>
@@ -63,7 +68,7 @@ class SignOutViewModel(application: Application) : AndroidViewModel(application)
                 }
                 _registerState.value = RegisterState()
                 if (result != null) {
-                    AppAuth.getInstance().setAuth(result.id, result.token)
+                    auth.setAuth(result.id, result.token)
                 }
             } catch (e: Exception) {
                 _registerState.value = RegisterState(error = true)
@@ -76,7 +81,7 @@ class SignOutViewModel(application: Application) : AndroidViewModel(application)
             try {
                 val result = repository.login(username, password)
                 _loginState.value = LoginState(isLogin = true)
-                AppAuth.getInstance().setAuth(result.id, result.token)
+                auth.setAuth(result.id, result.token)
             } catch (e: Exception) {
                 _loginState.value = LoginState(error = true)
             }

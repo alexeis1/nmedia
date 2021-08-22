@@ -16,11 +16,15 @@ import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentSignOutBinding
 
+@AndroidEntryPoint
 class SignOutFragment : Fragment() {
-    private val viewModel: SignOutViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: SignOutViewModel by viewModels(
+        ownerProducer = ::requireParentFragment
+    )
 
     override fun onPrepareOptionsMenu(menu: Menu){
         super.onPrepareOptionsMenu(menu)
