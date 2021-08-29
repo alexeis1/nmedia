@@ -25,12 +25,10 @@ data class SignOutInfo(
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
-class SignOutViewModel@Inject constructor(
-    private val auth: AppAuth
+class SignOutViewModel @Inject constructor(
+    private val auth: AppAuth,
+    private val repository: RegisterRepositoryInterface
 ) : ViewModel() {
-    @Inject
-    lateinit var repository: RegisterRepositoryInterface
-
     private val _photo = MutableLiveData(noPhoto)
     val photo: LiveData<PhotoModel>
         get() = _photo
@@ -87,5 +85,4 @@ class SignOutViewModel@Inject constructor(
             }
         }
     }
-
 }

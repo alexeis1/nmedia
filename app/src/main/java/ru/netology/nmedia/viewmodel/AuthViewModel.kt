@@ -10,7 +10,9 @@ import ru.netology.nmedia.auth.AuthState
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(private val auth: AppAuth) : ViewModel() {
+class AuthViewModel @Inject constructor(
+    private val auth: AppAuth
+) : ViewModel() {
     val data: LiveData<AuthState> = auth.authStateFlow
         .asLiveData(Dispatchers.Default)
     val authenticated: Boolean

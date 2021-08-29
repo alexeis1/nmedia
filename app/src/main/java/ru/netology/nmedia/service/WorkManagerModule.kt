@@ -1,6 +1,5 @@
 package ru.netology.nmedia.service
 
-import android.app.Application
 import android.content.Context
 import androidx.work.WorkManager
 import dagger.Module

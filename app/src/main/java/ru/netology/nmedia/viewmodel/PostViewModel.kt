@@ -41,6 +41,7 @@ private val noPhoto = PhotoModel()
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
+    private val workManager: WorkManager,
     auth: AppAuth
 ) : ViewModel() {
     val data: LiveData<FeedModel> = auth.authStateFlow
@@ -53,9 +54,6 @@ class PostViewModel @Inject constructor(
                     )
                 }
         }.asLiveData(Dispatchers.Default)
-
-    @Inject
-    lateinit var workManager: WorkManager
 
     private val _dataState = MutableLiveData<FeedModelState>()
     val dataState: LiveData<FeedModelState>

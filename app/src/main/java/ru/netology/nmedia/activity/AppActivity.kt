@@ -25,12 +25,11 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     @Inject
     lateinit var auth: AppAuth
     @Inject
-    lateinit var fmc: FirebaseMessaging
+    lateinit var firebaseMessaging: FirebaseMessaging
     @Inject
-    lateinit var googleServices: GoogleApiAvailability
+    lateinit var googleApiAvailability: GoogleApiAvailability
     private val viewModel: AuthViewModel by viewModels()
 
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -58,7 +57,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
             invalidateOptionsMenu()
         }
 
-        fmc.token.addOnCompleteListener { task ->
+        firebaseMessaging.token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 println("some stuff happened: ${task.exception}")
                 return@addOnCompleteListener
@@ -114,7 +113,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     }
 
     private fun checkGoogleApiAvailability() {
-        with(googleServices) {
+        with(googleApiAvailability) {
             val code = isGooglePlayServicesAvailable(this@AppActivity)
             if (code == ConnectionResult.SUCCESS) {
                 return@with
