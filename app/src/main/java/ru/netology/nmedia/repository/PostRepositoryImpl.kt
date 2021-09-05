@@ -7,6 +7,7 @@ import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -34,11 +35,13 @@ class PostRepositoryImpl @Inject constructor(
     private val postWorkDao: PostWorkDao,
     private val apiService: ApiService,
 ) : PostRepository {
-
     override val data: Flow<PagingData<Post>> = Pager(
-        config = PagingConfig(pageSize = 5, enablePlaceholders = false),
-        pagingSourceFactory = { PostPagingSource(apiService) },
-    ).flow
+        config = PagingConfig(pageSize = 5, enablePlaceholders = false)
+    ){
+        postDao.getAllPaging()
+    }.flow.map { pagingData ->
+        pagingData.map {it.toDto() }
+    }
 
     override suspend fun getAll() {
         try {
