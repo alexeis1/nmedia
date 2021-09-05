@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -65,7 +68,27 @@ class FeedFragment : Fragment() {
             }
         }, authViewModel)
         binding.list.adapter = adapter
-        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest(adapter::submitData)
+        }
+
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest { state ->
+                    binding.swiperefresh.isRefreshing =
+                        state.refresh is LoadState.Loading ||
+                        state.prepend is LoadState.Loading ||
+                        state.append is LoadState.Loading
+                }
+        }
+
+        binding.swiperefresh.setOnRefreshListener(adapter::refresh)
+
+        binding.fab.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+        }
+
+        /*viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.swiperefresh.isRefreshing = state.refreshing
             if (state.error) {
@@ -108,7 +131,7 @@ class FeedFragment : Fragment() {
 
         binding.swiperefresh.setOnRefreshListener {
             viewModel.refreshPosts()
-        }
+        }*/
 
         authViewModel.data.observe(viewLifecycleOwner){
             if (it.id != 0L) {

@@ -14,7 +14,7 @@ object ApiServiceModule {
     @Provides
     @Singleton
     fun provideApiService(auth: AppAuth): ApiService {
-        return retrofit(okhttp(loggingInterceptor(), authInterceptor(auth)), BASE_URL_SLOW)
+        return retrofit(okhttp(loggingInterceptor(), authInterceptor(auth)), BASE_URL)
             .create(ApiService::class.java)
     }
 
